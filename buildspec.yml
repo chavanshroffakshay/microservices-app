@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo "Installing dependencies..."
+  pre_build:
+    commands:
+      - echo "Running pre-build checks..."
+      - echo "Validating HTML files..."
+      - test -f index.html && echo "index.html found" || exit 1
+  build:
+    commands:
+      - echo "Building application..."
+      - echo "Build started on $(date)"
+      - BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+      - sed -i "s|2024-01-01T00:00:00Z|$BUILD_TIME|g" index.html
+      - echo "Build completed successfully"
+  post_build:
+    commands:
+      - echo "Post-build steps..."
+      - echo "Build completed on $(date)"
+
+artifacts:
+  files:
+    - '**/*'
+  discard-paths: no
